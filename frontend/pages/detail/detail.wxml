@@ -1,0 +1,69 @@
+<view class="container" wx:if="{{item}}">
+  <!-- Image swiper -->
+  <swiper class="swiper" indicator-dots="{{item.images.length > 1}}" autoplay="{{false}}" circular>
+    <swiper-item wx:for="{{item.images}}" wx:key="index">
+      <image class="swiper-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-url="{{item}}" />
+    </swiper-item>
+    <swiper-item wx:if="{{item.images.length === 0}}">
+      <image class="swiper-img" src="/images/placeholder.png" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+
+  <!-- Item info -->
+  <view class="item-card">
+    <view class="item-header">
+      <text class="item-price">¥{{item.price}}</text>
+      <view class="status-tag status-{{item.status}}">{{STATUS_MAP[item.status]}}</view>
+    </view>
+    <text class="item-title">{{item.title}}</text>
+    <view class="item-tags">
+      <text class="tag-category">{{item.category === 'textbook' ? '教材' : item.category === 'electronics' ? '电子' : '生活'}}</text>
+      <text class="tag-location">📍 {{item.location}}</text>
+    </view>
+    <text class="item-desc">{{item.description}}</text>
+  </view>
+
+  <!-- Seller info -->
+  <view class="seller-card">
+    <view class="seller-info">
+      <image class="seller-avatar" src="{{item.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="seller-detail">
+        <text class="seller-name">{{item.nickname || '匿名用户'}}</text>
+        <text class="seller-college">{{item.college}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Owner controls -->
+  <view class="owner-actions" wx:if="{{item.user_id === currentUserId}}">
+    <button class="action-btn btn-edit" bindtap="onEditItem">编辑</button>
+    <button class="action-btn btn-traded" data-status="traded" bindtap="onChangeStatus" wx:if="{{item.status === 'available'}}">标记已售</button>
+    <button class="action-btn btn-offline" data-status="offline" bindtap="onChangeStatus" wx:if="{{item.status === 'available'}}">下架</button>
+    <button class="action-btn btn-online" data-status="available" bindtap="onChangeStatus" wx:if="{{item.status !== 'available'}}">重新上架</button>
+  </view>
+
+  <!-- Messages -->
+  <view class="messages-section">
+    <text class="section-title">留言咨询（{{messages.length}}）</text>
+    <view class="message-list">
+      <view class="message-item" wx:for="{{messages}}" wx:key="id" wx:for-item="msg">
+        <image class="msg-avatar" src="{{msg.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
+        <view class="msg-content">
+          <view class="msg-header">
+            <text class="msg-name">{{msg.nickname || '匿名用户'}}</text>
+            <text class="msg-college">{{msg.college}}</text>
+          </view>
+          <text class="msg-text">{{msg.content}}</text>
+          <text class="msg-time">{{msg.created_at}}</text>
+        </view>
+      </view>
+      <view class="no-message" wx:if="{{messages.length === 0}}">暂无留言，快来咨询吧~</view>
+    </view>
+  </view>
+
+  <!-- Message input -->
+  <view class="message-input-bar" wx:if="{{item.status === 'available' && item.user_id !== currentUserId}}">
+    <input class="msg-input" placeholder="有问题？留言咨询卖家..." value="{{messageContent}}" bindinput="onMessageInput" />
+    <button class="send-btn" bindtap="onSendMessage" loading="{{loading}}">发送</button>
+  </view>
+</view>

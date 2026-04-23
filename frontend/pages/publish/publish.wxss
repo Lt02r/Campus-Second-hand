@@ -1,0 +1,98 @@
+.form-group {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+.form-label {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 12rpx;
+}
+.required {
+  color: #e64340;
+}
+.form-input {
+  font-size: 28rpx;
+  color: #333;
+  width: 100%;
+  padding: 10rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.form-picker {
+  font-size: 28rpx;
+  color: #333;
+  padding: 10rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.form-textarea {
+  font-size: 28rpx;
+  color: #333;
+  width: 100%;
+  height: 160rpx;
+  padding: 10rpx 0;
+}
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.image-item {
+  position: relative;
+  width: 180rpx;
+  height: 180rpx;
+}
+.preview-img {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 8rpx;
+  object-fit: cover;
+}
+.img-delete {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  text-align: center;
+}
+.image-add {
+  width: 180rpx;
+  height: 180rpx;
+  border: 2rpx dashed #ccc;
+  border-radius: 8rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.add-icon {
+  font-size: 60rpx;
+  color: #ccc;
+  line-height: 1;
+}
+.add-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+.submit-btn {
+  background: #1E90FF;
+  color: #fff;
+  border-radius: 50rpx;
+  width: 100%;
+  font-size: 32rpx;
+  margin-top: 20rpx;
+  border: none;
+}
+.submit-btn::after { border: none; }

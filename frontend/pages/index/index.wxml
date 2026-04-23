@@ -1,0 +1,46 @@
+<view class="container">
+  <!-- Search bar -->
+  <view class="search-bar">
+    <input class="search-input" placeholder="搜索商品名称" value="{{keyword}}" bindconfirm="onSearch" />
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+
+  <!-- Filters -->
+  <view class="filter-row">
+    <picker mode="selector" range="{{categories}}" range-key="label" bindchange="onCategoryChange">
+      <view class="filter-btn">{{categories[categoryIndex].label || '全部分类'}} ▾</view>
+    </picker>
+    <picker mode="selector" range="{{sortOptions}}" range-key="label" bindchange="onSortChange">
+      <view class="filter-btn">{{sortOptions[sortIndex].label || '排序'}} ▾</view>
+    </picker>
+  </view>
+
+  <!-- Price filter -->
+  <view class="price-filter">
+    <input class="price-input" type="digit" placeholder="最低价" value="{{minPrice}}" bindinput="onMinPriceInput" />
+    <text class="price-sep">-</text>
+    <input class="price-input" type="digit" placeholder="最高价" value="{{maxPrice}}" bindinput="onMaxPriceInput" />
+    <button class="filter-search-btn" bindtap="onPriceFilter">筛选</button>
+  </view>
+
+  <!-- Item list -->
+  <view class="item-list">
+    <view class="item-card" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <image class="item-img" src="{{item.images[0] || '/images/placeholder.png'}}" mode="aspectFill" />
+      <view class="item-info">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-meta">
+          <text class="item-category">{{CATEGORY_MAP[item.category]}}</text>
+          <text class="item-college">{{item.college}}</text>
+        </view>
+        <view class="item-bottom">
+          <text class="item-price">¥{{item.price}}</text>
+          <text class="item-location">{{item.location}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="loading-tip" wx:if="{{loading}}">加载中...</view>
+    <view class="empty-tip" wx:if="{{!loading && items.length === 0}}">暂无商品</view>
+    <view class="no-more" wx:if="{{!hasMore && items.length > 0}}">没有更多了</view>
+  </view>
+</view>

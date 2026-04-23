@@ -1,0 +1,37 @@
+<view class="container login-container">
+  <!-- Login step -->
+  <block wx:if="{{step === 'login'}}">
+    <view class="logo-area">
+      <image class="logo" src="/images/logo.png" mode="aspectFit" />
+      <text class="app-name">校园二手平台</text>
+      <text class="app-desc">安全 · 便捷 · 校园专属</text>
+    </view>
+    <button class="wx-login-btn" bindtap="onWxLogin" loading="{{loading}}" disabled="{{loading}}">
+      微信一键登录
+    </button>
+  </block>
+
+  <!-- Bind step -->
+  <block wx:if="{{step === 'bind'}}">
+    <view class="bind-header">
+      <text class="bind-title">绑定校园身份</text>
+      <text class="bind-desc">请输入学号完成身份认证，确保交易安全</text>
+    </view>
+    <view class="form-group">
+      <text class="form-label">学号</text>
+      <input class="form-input" type="number" placeholder="请输入10位学号" maxlength="10" bindinput="onStudentIdInput" />
+    </view>
+    <view class="form-group">
+      <text class="form-label">所属学院</text>
+      <picker mode="selector" range="{{colleges}}" bindchange="onCollegeChange">
+        <view class="form-picker">
+          {{colleges[collegeIndex] || '请选择学院'}} ▾
+        </view>
+      </picker>
+    </view>
+    <button class="bind-btn" bindtap="onBind" loading="{{loading}}" disabled="{{loading}}">
+      完成绑定
+    </button>
+    <text class="bind-note">* 学号格式：10位数字，前两位为入学年份</text>
+  </block>
+</view>

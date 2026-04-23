@@ -1,0 +1,62 @@
+<view class="container">
+  <!-- Not logged in -->
+  <view class="login-prompt" wx:if="{{!userInfo}}">
+    <image class="default-avatar" src="/images/default-avatar.png" mode="aspectFill" />
+    <text class="login-hint">登录后查看个人信息和发布记录</text>
+    <button class="login-btn" bindtap="goToLogin">立即登录</button>
+  </view>
+
+  <!-- Logged in -->
+  <block wx:if="{{userInfo}}">
+    <!-- User info card -->
+    <view class="user-card">
+      <image class="user-avatar" src="{{userInfo.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickname || '用户' + userInfo.id}}</text>
+        <text class="user-college">{{userInfo.college || '未绑定学院'}}</text>
+        <text class="user-id">学号：{{userInfo.student_id || '未绑定'}}</text>
+      </view>
+    </view>
+
+    <!-- Tabs -->
+    <view class="tabs">
+      <view class="tab {{activeTab === 'items' ? 'active' : ''}}" data-tab="items" bindtap="onTabChange">我的发布</view>
+      <view class="tab {{activeTab === 'messages' ? 'active' : ''}}" data-tab="messages" bindtap="onTabChange">我的留言</view>
+    </view>
+
+    <!-- My items -->
+    <view wx:if="{{activeTab === 'items'}}">
+      <view class="item-row" wx:for="{{myItems}}" wx:key="id">
+        <view class="item-brief" bindtap="goToDetail" data-id="{{item.id}}">
+          <image class="item-thumb" src="{{item.images[0] || '/images/placeholder.png'}}" mode="aspectFill" />
+          <view class="item-brief-info">
+            <text class="brief-title">{{item.title}}</text>
+            <view class="brief-meta">
+              <text class="brief-category">{{CATEGORY_MAP[item.category]}}</text>
+              <view class="brief-status status-{{item.status}}">{{STATUS_MAP[item.status]}}</view>
+            </view>
+            <text class="brief-price">¥{{item.price}}</text>
+          </view>
+        </view>
+        <view class="item-actions">
+          <text class="action-edit" bindtap="goToEdit" data-id="{{item.id}}">编辑</text>
+          <text class="action-delete" bindtap="onDeleteItem" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+      <view class="empty-tip" wx:if="{{myItems.length === 0}}">暂无发布记录</view>
+    </view>
+
+    <!-- My messages -->
+    <view wx:if="{{activeTab === 'messages'}}">
+      <view class="msg-row" wx:for="{{myMessages}}" wx:key="id" bindtap="goToDetail" data-id="{{item.item_id}}">
+        <view class="msg-item-title">{{item.item_title}}</view>
+        <view class="msg-item-status status-{{item.item_status}}">{{STATUS_MAP[item.item_status]}}</view>
+        <text class="msg-item-content">我：{{item.content}}</text>
+        <text class="msg-item-time">{{item.created_at}}</text>
+      </view>
+      <view class="empty-tip" wx:if="{{myMessages.length === 0}}">暂无留言记录</view>
+    </view>
+
+    <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  </block>
+</view>

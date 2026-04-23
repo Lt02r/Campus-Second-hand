@@ -1,0 +1,49 @@
+# =========================
+# 1. Node.js 依赖 (绝对不能传)
+# =========================
+backend/node_modules/
+frontend/miniprogram_npm/
+frontend/node_modules/
+
+# =========================
+# 2. 服务器端 (Backend) 机密与动态生成文件
+# =========================
+# 环境变量与密钥 (非常重要！防止数据库密码泄露)
+backend/.env
+backend/.env.local
+backend/.env.*
+
+# 用户上传的动态文件 (只保留文件夹结构，不传里面的图片)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# 运行日志
+backend/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 如果你本地测试用了 SQLite 数据库文件，不应该上传
+*.sqlite
+*.db
+
+# 测试覆盖率报告或打包输出??件夹(如果有的话)
+coverage/
+dist/
+build/
+
+# =========================
+# 3. 微信小程序私有配置 (只忽略个人的，保留公共的)
+# =========================
+project.private.config.json
+
+# =========================
+# 4. 系统与编辑器缓存
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.idea/
+.vscode/
+*.swp
