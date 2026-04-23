@@ -97,7 +97,19 @@ Page({
     const images = this.data.images.filter((_, i) => i !== index);
     this.setData({ images });
   },
+  resetForm() {
+    this.setData({
+      title: '',
+      categoryIndex: 0,
+      price: '',
+      description: '',
+      locationIndex: 0,
+      images: [],
+      editId: null
+    });
+  },
   async onSubmit() {
+    if (this.data.loading) return;
     const { title, categories, categoryIndex, price, description, locations, locationIndex, images, editId } = this.data;
     if (!title) return wx.showToast({ title: '请输入物品名称', icon: 'none' });
     if (!price) return wx.showToast({ title: '请输入价格', icon: 'none' });
@@ -125,13 +137,17 @@ Page({
       }
       if (res.code === 0) {
         wx.showToast({ title: editId ? '修改成功' : '发布成功', icon: 'success' });
-        setTimeout(() => wx.navigateBack(), 1500);
+        this.resetForm();
+        setTimeout(() => {
+          wx.switchTab({ url: '/pages/index/index' });
+        }, 1200);
       } else {
         wx.showToast({ title: res.msg || '操作失败', icon: 'none' });
       }
     } catch (e) {
       wx.showToast({ title: '操作失败，请重试', icon: 'none' });
+    } finally {
+      this.setData({ loading: false });
     }
-    this.setData({ loading: false });
   }
 });

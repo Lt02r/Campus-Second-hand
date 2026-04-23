@@ -17,6 +17,17 @@
       <text class="bind-title">绑定校园身份</text>
       <text class="bind-desc">请输入学号完成身份认证，确保交易安全</text>
     </view>
+    <view class="profile-edit-card">
+      <image class="profile-avatar" src="{{avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="profile-edit-actions">
+        <button class="mini-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">选择头像</button>
+        <button class="mini-btn mini-btn-ghost" bindtap="onGetWxProfile">微信授权回填</button>
+      </view>
+    </view>
+    <view class="form-group">
+      <text class="form-label">昵称</text>
+      <input class="form-input" type="nickname" placeholder="请输入昵称（可编辑）" maxlength="50" value="{{nickname}}" bindinput="onNicknameInput" />
+    </view>
     <view class="form-group">
       <text class="form-label">学号</text>
       <input class="form-input" type="number" placeholder="请输入10位学号" maxlength="10" bindinput="onStudentIdInput" />

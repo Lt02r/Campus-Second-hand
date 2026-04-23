@@ -7,10 +7,10 @@
 
   <!-- Filters -->
   <view class="filter-row">
-    <picker mode="selector" range="{{categories}}" range-key="label" bindchange="onCategoryChange">
+    <picker mode="selector" range="{{categories}}" range-key="label" value="{{categoryIndex}}" bindchange="onCategoryChange">
       <view class="filter-btn">{{categories[categoryIndex].label || '全部分类'}} ▾</view>
     </picker>
-    <picker mode="selector" range="{{sortOptions}}" range-key="label" bindchange="onSortChange">
+    <picker mode="selector" range="{{sortOptions}}" range-key="label" value="{{sortIndex}}" bindchange="onSortChange">
       <view class="filter-btn">{{sortOptions[sortIndex].label || '排序'}} ▾</view>
     </picker>
   </view>

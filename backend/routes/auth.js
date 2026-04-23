@@ -102,4 +102,26 @@ router.get('/user', async (req, res) => {
   }
 });
 
+// Update user profile
+router.put('/user', async (req, res) => {
+  const userId = req.headers['x-user-id'];
+  if (!userId) return res.status(401).json({ code: 401, msg: '未登录' });
+  const { nickname, avatarUrl } = req.body || {};
+  try {
+    const [rows] = await pool.query('SELECT id, nickname, avatar_url FROM users WHERE id=?', [userId]);
+    if (rows.length === 0) return res.status(404).json({ code: 404, msg: '用户不存在' });
+    const currentUser = rows[0];
+    const nextNickname = nickname === undefined ? (currentUser.nickname || '') : String(nickname).trim();
+    const nextAvatarUrl = avatarUrl === undefined ? (currentUser.avatar_url || '') : String(avatarUrl).trim();
+    if (nextNickname.length > 50) return res.status(400).json({ code: 400, msg: '昵称长度不能超过50' });
+    if (nextAvatarUrl.length > 500) return res.status(400).json({ code: 400, msg: '头像地址过长' });
+
+    await pool.query('UPDATE users SET nickname=?, avatar_url=? WHERE id=?', [nextNickname, nextAvatarUrl, userId]);
+    res.json({ code: 0, msg: '保存成功', data: { nickname: nextNickname, avatar_url: nextAvatarUrl } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ code: 500, msg: '服务器错误' });
+  }
+});
+
 module.exports = router;

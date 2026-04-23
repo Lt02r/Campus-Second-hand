@@ -20,7 +20,6 @@ const request = (url, method = 'GET', data = {}) => {
       },
       fail(err) {
         reject(err || new Error('网络请求超时或失败'));
->>>>>>> d0e6cf1758f51a0e6f8323cbcbd9beabd20fb9b0
       }
     });
   });

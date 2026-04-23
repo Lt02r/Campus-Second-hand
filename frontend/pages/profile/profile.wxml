@@ -10,11 +10,19 @@
   <block wx:if="{{userInfo}}">
     <!-- User info card -->
     <view class="user-card">
-      <image class="user-avatar" src="{{userInfo.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
-      <view class="user-info">
+      <image class="user-avatar" src="{{editAvatarUrl || userInfo.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="user-info profile-edit-info">
         <text class="user-name">{{userInfo.nickname || '用户' + userInfo.id}}</text>
         <text class="user-college">{{userInfo.college || '未绑定学院'}}</text>
         <text class="user-id">学号：{{userInfo.student_id || '未绑定'}}</text>
+        <view class="edit-row">
+          <input class="nickname-input" type="nickname" placeholder="请输入昵称" maxlength="50" value="{{editNickname}}" bindinput="onNicknameInput" />
+        </view>
+        <view class="edit-actions">
+          <button class="mini-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">更换头像</button>
+          <button class="mini-btn mini-btn-ghost" bindtap="onGetWxProfile">微信回填</button>
+          <button class="mini-btn mini-btn-save" bindtap="onSaveProfile" loading="{{savingProfile}}" disabled="{{savingProfile}}">保存</button>
+        </view>
       </view>
     </view>
 
