@@ -110,13 +110,18 @@ Page({
   },
   async onSubmit() {
     if (this.data.loading) return;
-    const { title, categories, categoryIndex, price, description, locations, locationIndex, images, editId } = this.data;
-    if (!title) return wx.showToast({ title: '请输入物品名称', icon: 'none' });
-    if (!price) return wx.showToast({ title: '请输入价格', icon: 'none' });
-    const parsedPrice = parseFloat(price);
-    if (isNaN(parsedPrice) || parsedPrice < 0) return wx.showToast({ title: '请输入有效价格', icon: 'none' });
-    if (images.length === 0) return wx.showToast({ title: '请至少上传一张图片', icon: 'none' });
     this.setData({ loading: true });
+    const failSubmit = (title) => {
+      wx.showToast({ title, icon: 'none' });
+      this.setData({ loading: false });
+      return;
+    };
+    const { title, categories, categoryIndex, price, description, locations, locationIndex, images, editId } = this.data;
+    if (!title) return failSubmit('请输入物品名称');
+    if (!price) return failSubmit('请输入价格');
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice < 0) return failSubmit('请输入有效价格');
+    if (images.length === 0) return failSubmit('请至少上传一张图片');
     // Strip baseUrl prefix so backend receives relative paths like /uploads/xxx
     const baseUrl = getApp().globalData.baseUrl;
     const relativeImages = images.map(img => img.startsWith(baseUrl) ? img.slice(baseUrl.length) : img);

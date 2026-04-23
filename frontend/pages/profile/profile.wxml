@@ -16,11 +16,12 @@
         <text class="user-college">{{userInfo.college || '未绑定学院'}}</text>
         <text class="user-id">学号：{{userInfo.student_id || '未绑定'}}</text>
         <view class="edit-row">
+          <text class="edit-label">昵称</text>
           <input class="nickname-input" type="nickname" placeholder="请输入昵称" maxlength="50" value="{{editNickname}}" bindinput="onNicknameInput" />
         </view>
         <view class="edit-actions">
           <button class="mini-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">更换头像</button>
-          <button class="mini-btn mini-btn-ghost" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">微信回填</button>
+          <button class="mini-btn mini-btn-ghost" bindtap="onAuthorizeProfile">微信回填</button>
           <button class="mini-btn mini-btn-save" bindtap="onSaveProfile" loading="{{savingProfile}}" disabled="{{savingProfile}}">保存</button>
         </view>
       </view>

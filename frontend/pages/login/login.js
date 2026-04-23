@@ -91,13 +91,23 @@ Page({
       avatarUrl: userInfo.avatarUrl || this.data.avatarUrl
     });
   },
-  onGetUserInfo(e) {
-    const userInfo = e.detail && e.detail.userInfo;
-    if (!userInfo) {
-      wx.showToast({ title: '未授权获取微信资料', icon: 'none' });
+  onAuthorizeProfile() {
+    if (wx.getUserProfile) {
+      wx.getUserProfile({
+        desc: '用于完善头像和昵称',
+        success: (res) => this.fillWxProfile(res.userInfo || {}),
+        fail: () => wx.showToast({ title: '未授权获取微信资料', icon: 'none' })
+      });
       return;
     }
-    this.fillWxProfile(userInfo);
+    if (wx.getUserInfo) {
+      wx.getUserInfo({
+        success: (res) => this.fillWxProfile((res && res.userInfo) || {}),
+        fail: () => wx.showToast({ title: '未授权获取微信资料', icon: 'none' })
+      });
+      return;
+    }
+    wx.showToast({ title: '当前微信版本不支持', icon: 'none' });
   },
   onCollegeChange(e) {
     this.setData({ collegeIndex: e.detail.value });
