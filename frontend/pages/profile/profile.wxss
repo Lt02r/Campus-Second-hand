@@ -1,0 +1,179 @@
+.login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120rpx;
+}
+.default-avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  margin-bottom: 30rpx;
+}
+.login-hint {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}
+.login-btn {
+  background: #1E90FF;
+  color: #fff;
+  border-radius: 50rpx;
+  width: 400rpx;
+  font-size: 30rpx;
+  border: none;
+}
+.login-btn::after { border: none; }
+.user-card {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 20rpx;
+}
+.user-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.user-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 6rpx;
+}
+.user-college, .user-id {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+}
+.tabs {
+  display: flex;
+  background: #fff;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+.tab.active {
+  color: #1E90FF;
+  border-bottom: 4rpx solid #1E90FF;
+  font-weight: bold;
+}
+.item-row {
+  background: #fff;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+}
+.item-brief {
+  display: flex;
+  padding: 16rpx;
+  gap: 16rpx;
+}
+.item-thumb {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+.brief-title {
+  font-size: 28rpx;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+.brief-meta {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 8rpx;
+}
+.brief-category {
+  font-size: 22rpx;
+  background: #fef0f0;
+  color: #1E90FF;
+  padding: 2rpx 10rpx;
+  border-radius: 4rpx;
+}
+.brief-status {
+  font-size: 22rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 4rpx;
+}
+.status-available { background: #e8f5e9; color: #2e7d32; }
+.status-traded { background: #e3f2fd; color: #1565c0; }
+.status-offline { background: #f5f5f5; color: #999; }
+.brief-price {
+  font-size: 30rpx;
+  color: #e64340;
+  font-weight: bold;
+  display: block;
+}
+.item-actions {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+  padding: 16rpx;
+  gap: 20rpx;
+  justify-content: flex-end;
+}
+.action-edit {
+  font-size: 26rpx;
+  color: #666;
+  padding: 8rpx 20rpx;
+}
+.action-delete {
+  font-size: 26rpx;
+  color: #1E90FF;
+  padding: 8rpx 20rpx;
+}
+.msg-row {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+.msg-item-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+.msg-item-content {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-top: 8rpx;
+}
+.msg-item-time {
+  font-size: 22rpx;
+  color: #ccc;
+  display: block;
+  margin-top: 6rpx;
+}
+.empty-tip {
+  text-align: center;
+  color: #999;
+  font-size: 26rpx;
+  padding: 60rpx 0;
+}
+.logout-btn {
+  background: #f5f5f5;
+  color: #999;
+  border-radius: 50rpx;
+  width: 100%;
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  border: none;
+}
+.logout-btn::after { border: none; }
