@@ -3,7 +3,7 @@ App({
     userId: null,
     isBound: false,
     userInfo: null,
-    baseUrl: 'http://106.53.76.214:3000'  //后端
+    baseUrl: 'https://backend.lt02r.cn'  //后端
   },
   onLaunch() {
     const userId = wx.getStorageSync('userId');
