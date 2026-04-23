@@ -21,7 +21,7 @@
       <image class="profile-avatar" src="{{avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
       <view class="profile-edit-actions">
         <button class="mini-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">选择头像</button>
-        <button class="mini-btn mini-btn-ghost" bindtap="onGetWxProfile">微信授权回填</button>
+        <button class="mini-btn mini-btn-ghost" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">微信授权回填</button>
       </view>
     </view>
     <view class="form-group">

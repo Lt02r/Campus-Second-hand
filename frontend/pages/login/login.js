@@ -85,20 +85,19 @@ Page({
       this.setData({ avatarUrl: e.detail.avatarUrl });
     }
   },
-  onGetWxProfile() {
-    wx.getUserProfile({
-      desc: '用于完善头像和昵称',
-      success: (res) => {
-        const userInfo = res.userInfo || {};
-        this.setData({
-          nickname: userInfo.nickName || this.data.nickname,
-          avatarUrl: userInfo.avatarUrl || this.data.avatarUrl
-        });
-      },
-      fail: () => {
-        wx.showToast({ title: '未授权获取微信资料', icon: 'none' });
-      }
+  fillWxProfile(userInfo = {}) {
+    this.setData({
+      nickname: userInfo.nickName || this.data.nickname,
+      avatarUrl: userInfo.avatarUrl || this.data.avatarUrl
     });
+  },
+  onGetUserInfo(e) {
+    const userInfo = e.detail && e.detail.userInfo;
+    if (!userInfo) {
+      wx.showToast({ title: '未授权获取微信资料', icon: 'none' });
+      return;
+    }
+    this.fillWxProfile(userInfo);
   },
   onCollegeChange(e) {
     this.setData({ collegeIndex: e.detail.value });
