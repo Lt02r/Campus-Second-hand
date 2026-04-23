@@ -15,11 +15,11 @@ const request = (url, method = 'GET', data = {}) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(res.data);
         } else {
-          reject(res.data);
+          reject(res.data || new Error(`请求失败，状态码: ${res.statusCode}`));
         }
       },
       fail(err) {
-        reject(err);
+        reject(err || new Error('网络请求超时或失败'));
       }
     });
   });
