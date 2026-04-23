@@ -4,6 +4,9 @@ const app = getApp();
 Page({
   data: {
     userInfo: null,
+    editNickname: '',
+    editAvatarUrl: '',
+    savingProfile: false,
     myItems: [],
     myMessages: [],
     activeTab: 'items',
@@ -23,7 +26,13 @@ Page({
   async loadUserInfo() {
     try {
       const res = await request('/api/auth/user');
-      if (res.code === 0) this.setData({ userInfo: res.data });
+      if (res.code === 0) {
+        this.setData({
+          userInfo: res.data,
+          editNickname: res.data.nickname || '',
+          editAvatarUrl: res.data.avatar_url || ''
+        });
+      }
     } catch (e) {}
   },
   async loadMyItems() {
@@ -45,6 +54,57 @@ Page({
   },
   goToLogin() {
     wx.navigateTo({ url: '/pages/login/login' });
+  },
+  onNicknameInput(e) {
+    this.setData({ editNickname: e.detail.value });
+  },
+  onChooseAvatar(e) {
+    if (e.detail && e.detail.avatarUrl) {
+      this.setData({ editAvatarUrl: e.detail.avatarUrl });
+    }
+  },
+  fillWxProfile(userInfo = {}) {
+    this.setData({
+      editNickname: userInfo.nickName || this.data.editNickname,
+      editAvatarUrl: userInfo.avatarUrl || this.data.editAvatarUrl
+    });
+  },
+  onAuthorizeProfile() {
+    if (wx.getUserProfile) {
+      wx.getUserProfile({
+        desc: '用于完善头像和昵称',
+        success: (res) => this.fillWxProfile(res.userInfo || {}),
+        fail: () => wx.showToast({ title: '未授权获取微信资料', icon: 'none' })
+      });
+      return;
+    }
+    if (wx.getUserInfo) {
+      wx.getUserInfo({
+        success: (res) => this.fillWxProfile((res && res.userInfo) || {}),
+        fail: () => wx.showToast({ title: '未授权获取微信资料', icon: 'none' })
+      });
+      return;
+    }
+    wx.showToast({ title: '当前微信版本不支持', icon: 'none' });
+  },
+  async onSaveProfile() {
+    if (this.data.savingProfile) return;
+    const nickname = (this.data.editNickname || '').trim();
+    const avatarUrl = (this.data.editAvatarUrl || '').trim();
+    if (nickname.length > 50) return wx.showToast({ title: '昵称最多50字', icon: 'none' });
+    this.setData({ savingProfile: true });
+    try {
+      const res = await request('/api/auth/user', 'PUT', { nickname, avatarUrl });
+      if (res.code === 0) {
+        wx.showToast({ title: '保存成功', icon: 'success' });
+        this.loadUserInfo();
+      } else {
+        wx.showToast({ title: res.msg || '保存失败', icon: 'none' });
+      }
+    } catch (e) {
+      wx.showToast({ title: '保存失败，请重试', icon: 'none' });
+    }
+    this.setData({ savingProfile: false });
   },
   goToDetail(e) {
     const { id } = e.currentTarget.dataset;

@@ -5,6 +5,8 @@ Page({
   data: {
     step: 'login', // 'login' or 'bind'
     studentId: '',
+    nickname: '',
+    avatarUrl: '',
     college: '',
     colleges: [],
     collegeIndex: 0,
@@ -50,7 +52,12 @@ Page({
               wx.showToast({ title: '登录成功', icon: 'success' });
               setTimeout(() => wx.navigateBack(), 1500);
             } else {
-              this.setData({ step: 'bind', loading: false });
+              this.setData({
+                step: 'bind',
+                nickname: res.data.nickname || '',
+                avatarUrl: res.data.avatarUrl || '',
+                loading: false
+              });
             }
           } else {
             wx.showToast({ title: res.msg || '登录失败', icon: 'none' });
@@ -70,20 +77,56 @@ Page({
   onStudentIdInput(e) {
     this.setData({ studentId: e.detail.value });
   },
+  onNicknameInput(e) {
+    this.setData({ nickname: e.detail.value });
+  },
+  onChooseAvatar(e) {
+    if (e.detail && e.detail.avatarUrl) {
+      this.setData({ avatarUrl: e.detail.avatarUrl });
+    }
+  },
+  fillWxProfile(userInfo = {}) {
+    this.setData({
+      nickname: userInfo.nickName || this.data.nickname,
+      avatarUrl: userInfo.avatarUrl || this.data.avatarUrl
+    });
+  },
+  onAuthorizeProfile() {
+    if (wx.getUserProfile) {
+      wx.getUserProfile({
+        desc: '用于完善头像和昵称',
+        success: (res) => this.fillWxProfile(res.userInfo || {}),
+        fail: () => wx.showToast({ title: '未授权获取微信资料', icon: 'none' })
+      });
+      return;
+    }
+    if (wx.getUserInfo) {
+      wx.getUserInfo({
+        success: (res) => this.fillWxProfile((res && res.userInfo) || {}),
+        fail: () => wx.showToast({ title: '未授权获取微信资料', icon: 'none' })
+      });
+      return;
+    }
+    wx.showToast({ title: '当前微信版本不支持', icon: 'none' });
+  },
   onCollegeChange(e) {
     this.setData({ collegeIndex: e.detail.value });
   },
   async onBind() {
-    const { studentId, colleges, collegeIndex } = this.data;
+    const { studentId, nickname, avatarUrl, colleges, collegeIndex } = this.data;
     if (!studentId) return wx.showToast({ title: '请输入学号', icon: 'none' });
     if (colleges.length === 0) return wx.showToast({ title: '请等待学院列表加载', icon: 'none' });
     const studentIdRegex = /^\d{10}$/;
     if (!studentIdRegex.test(studentId)) return wx.showToast({ title: '请输入正确的10位学号', icon: 'none' });
+    const trimmedNickname = (nickname || '').trim();
+    if (trimmedNickname.length > 50) return wx.showToast({ title: '昵称最多50字', icon: 'none' });
     this.setData({ loading: true });
     try {
       const res = await request('/api/auth/bind', 'POST', {
         studentId,
-        college: colleges[collegeIndex]
+        college: colleges[collegeIndex],
+        nickname: trimmedNickname,
+        avatarUrl: avatarUrl || ''
       });
       if (res.code === 0) {
         wx.setStorageSync('isBound', true);

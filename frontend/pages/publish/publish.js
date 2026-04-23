@@ -97,14 +97,31 @@ Page({
     const images = this.data.images.filter((_, i) => i !== index);
     this.setData({ images });
   },
+  resetForm() {
+    this.setData({
+      title: '',
+      categoryIndex: 0,
+      price: '',
+      description: '',
+      locationIndex: 0,
+      images: [],
+      editId: null
+    });
+  },
   async onSubmit() {
-    const { title, categories, categoryIndex, price, description, locations, locationIndex, images, editId } = this.data;
-    if (!title) return wx.showToast({ title: '请输入物品名称', icon: 'none' });
-    if (!price) return wx.showToast({ title: '请输入价格', icon: 'none' });
-    const parsedPrice = parseFloat(price);
-    if (isNaN(parsedPrice) || parsedPrice < 0) return wx.showToast({ title: '请输入有效价格', icon: 'none' });
-    if (images.length === 0) return wx.showToast({ title: '请至少上传一张图片', icon: 'none' });
+    if (this.data.loading) return;
     this.setData({ loading: true });
+    const failSubmit = (title) => {
+      wx.showToast({ title, icon: 'none' });
+      this.setData({ loading: false });
+      return;
+    };
+    const { title, categories, categoryIndex, price, description, locations, locationIndex, images, editId } = this.data;
+    if (!title) return failSubmit('请输入物品名称');
+    if (!price) return failSubmit('请输入价格');
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice < 0) return failSubmit('请输入有效价格');
+    if (images.length === 0) return failSubmit('请至少上传一张图片');
     // Strip baseUrl prefix so backend receives relative paths like /uploads/xxx
     const baseUrl = getApp().globalData.baseUrl;
     const relativeImages = images.map(img => img.startsWith(baseUrl) ? img.slice(baseUrl.length) : img);
@@ -125,13 +142,17 @@ Page({
       }
       if (res.code === 0) {
         wx.showToast({ title: editId ? '修改成功' : '发布成功', icon: 'success' });
-        setTimeout(() => wx.navigateBack(), 1500);
+        this.resetForm();
+        setTimeout(() => {
+          wx.switchTab({ url: '/pages/index/index' });
+        }, 1200);
       } else {
         wx.showToast({ title: res.msg || '操作失败', icon: 'none' });
       }
     } catch (e) {
       wx.showToast({ title: '操作失败，请重试', icon: 'none' });
+    } finally {
+      this.setData({ loading: false });
     }
-    this.setData({ loading: false });
   }
 });

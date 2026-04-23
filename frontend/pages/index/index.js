@@ -6,9 +6,11 @@ Page({
     items: [],
     keyword: '',
     category: '',
+    categoryIndex: 0,
     minPrice: '',
     maxPrice: '',
     sort: 'newest',
+    sortIndex: 0,
     page: 1,
     loading: false,
     hasMore: true,
@@ -76,11 +78,19 @@ Page({
     this.loadItems(true);
   },
   onCategoryChange(e) {
-    this.setData({ category: this.data.categories[e.detail.value].value });
+    const categoryIndex = parseInt(e.detail.value, 10);
+    this.setData({
+      categoryIndex,
+      category: this.data.categories[categoryIndex].value
+    });
     this.loadItems(true);
   },
   onSortChange(e) {
-    this.setData({ sort: this.data.sortOptions[e.detail.value].value });
+    const sortIndex = parseInt(e.detail.value, 10);
+    this.setData({
+      sortIndex,
+      sort: this.data.sortOptions[sortIndex].value
+    });
     this.loadItems(true);
   },
   onMinPriceInput(e) {
