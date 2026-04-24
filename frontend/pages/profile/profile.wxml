@@ -21,7 +21,6 @@
         </view>
         <view class="edit-actions">
           <button class="mini-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">更换头像</button>
-          <button class="mini-btn mini-btn-ghost" bindtap="onAuthorizeProfile">微信回填</button>
           <button class="mini-btn mini-btn-save" bindtap="onSaveProfile" loading="{{savingProfile}}" disabled="{{savingProfile}}">保存</button>
         </view>
       </view>

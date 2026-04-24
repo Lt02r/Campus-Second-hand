@@ -27,6 +27,13 @@ Page({
     ],
     CATEGORY_MAP
   },
+  onShow() {
+    const app = getApp();
+    if (app.globalData.needRefreshHome) {
+      app.globalData.needRefreshHome = false; 
+      wx.startPullDownRefresh(); 
+    }
+  },
   onLoad() {
     this.loadItems(true);
   },

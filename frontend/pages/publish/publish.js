@@ -19,7 +19,9 @@ Page({
     // Edit mode
     editId: null
   },
-  onLoad(options) {
+
+  // 【核心修改点】：将 onLoad 替换为 onShow，并读取全局变量
+  onShow() {
     if (!wx.getStorageSync('userId')) {
       wx.navigateTo({ url: '/pages/login/login' });
       return;
@@ -29,11 +31,18 @@ Page({
       wx.navigateTo({ url: '/pages/login/login' });
       return;
     }
-    if (options.id) {
-      this.setData({ editId: options.id });
-      this.loadItem(options.id);
+
+    // 检查全局变量中是否有传递过来的商品 ID
+    if (app.globalData.editItemId) {
+      const editId = app.globalData.editItemId;
+      this.setData({ editId: editId });
+      this.loadItem(editId); // 加载商品数据回显
+      
+      // 读取完必须清空，否则下次点击底部的“发布”栏也会变成修改该商品
+      app.globalData.editItemId = null;
     }
   },
+
   async loadItem(id) {
     try {
       const res = await request(`/api/items/${id}`);
@@ -51,16 +60,18 @@ Page({
           price: String(item.price),
           description: item.description,
           locationIndex: locationIndex >= 0 ? locationIndex : 0,
-          images: safeImages.map(fullImageUrl) // 修改这里！
+          images: safeImages.map(fullImageUrl)
         });
       }
     } catch (e) {}
   },
+  
   onTitleInput(e) { this.setData({ title: e.detail.value }); },
   onCategoryChange(e) { this.setData({ categoryIndex: parseInt(e.detail.value) }); },
   onPriceInput(e) { this.setData({ price: e.detail.value }); },
   onDescInput(e) { this.setData({ description: e.detail.value }); },
   onLocationChange(e) { this.setData({ locationIndex: parseInt(e.detail.value) }); },
+  
   onChooseImage() {
     const { images } = this.data;
     if (images.length >= 3) return wx.showToast({ title: '最多上传3张图片', icon: 'none' });
@@ -76,6 +87,7 @@ Page({
       }
     });
   },
+  
   async uploadImage(filePath) {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
@@ -97,11 +109,13 @@ Page({
       });
     });
   },
+  
   removeImage(e) {
     const { index } = e.currentTarget.dataset;
     const images = this.data.images.filter((_, i) => i !== index);
     this.setData({ images });
   },
+  
   resetForm() {
     this.setData({
       title: '',
@@ -113,23 +127,29 @@ Page({
       editId: null
     });
   },
+  
   async onSubmit() {
     if (this.data.loading) return;
     this.setData({ loading: true });
+    
     const failSubmit = (title) => {
       wx.showToast({ title, icon: 'none' });
       this.setData({ loading: false });
       return;
     };
+    
     const { title, categories, categoryIndex, price, description, locations, locationIndex, images, editId } = this.data;
+    
     if (!title) return failSubmit('请输入物品名称');
     if (!price) return failSubmit('请输入价格');
     const parsedPrice = parseFloat(price);
     if (isNaN(parsedPrice) || parsedPrice < 0) return failSubmit('请输入有效价格');
     if (images.length === 0) return failSubmit('请至少上传一张图片');
+    
     // Strip baseUrl prefix so backend receives relative paths like /uploads/xxx
     const baseUrl = getApp().globalData.baseUrl;
     const relativeImages = images.map(img => img.startsWith(baseUrl) ? img.slice(baseUrl.length) : img);
+    
     const body = {
       title,
       category: categories[categoryIndex].value,
@@ -138,6 +158,7 @@ Page({
       location: locations[locationIndex],
       images: relativeImages
     };
+    
     try {
       let res;
       if (editId) {
@@ -145,9 +166,11 @@ Page({
       } else {
         res = await request('/api/items', 'POST', body);
       }
+      
       if (res.code === 0) {
         wx.showToast({ title: editId ? '修改成功' : '发布成功', icon: 'success' });
         this.resetForm();
+        getApp().globalData.needRefreshHome = true;
         setTimeout(() => {
           wx.switchTab({ url: '/pages/index/index' });
         }, 1200);

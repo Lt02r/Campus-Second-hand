@@ -27,6 +27,10 @@ Page({
     try {
       const res = await request('/api/auth/user');
       if (res.code === 0) {
+        const userInfo = {
+          ...res.data,
+          avatar_url: fullImageUrl(res.data.avatar_url) 
+        };
         this.setData({
           userInfo: res.data,
           editNickname: res.data.nickname || '',
@@ -120,7 +124,10 @@ Page({
   },
   goToEdit(e) {
     const { id } = e.currentTarget.dataset;
-    wx.navigateTo({ url: `/pages/publish/publish?id=${id}` });
+    app.globalData.editItemId = id; 
+    
+    // 使用 switchTab 跳转到底部 TabBar 的发布页
+    wx.switchTab({ url: '/pages/publish/publish' });
   },
   async onDeleteItem(e) {
     const { id } = e.currentTarget.dataset;

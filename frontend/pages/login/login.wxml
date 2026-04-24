@@ -21,12 +21,11 @@
       <image class="profile-avatar" src="{{avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
       <view class="profile-edit-actions">
         <button class="mini-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">选择头像</button>
-        <button class="mini-btn mini-btn-ghost" bindtap="onAuthorizeProfile">微信授权回填</button>
       </view>
     </view>
     <view class="form-group">
       <text class="form-label">昵称</text>
-      <input class="form-input" type="nickname" placeholder="请输入昵称（可编辑）" maxlength="50" value="{{nickname}}" bindinput="onNicknameInput" />
+      <input class="form-input" type="nickname" placeholder="请输入昵称" maxlength="50" value="{{nickname}}" bindinput="onNicknameInput" />
     </view>
     <view class="form-group">
       <text class="form-label">学号</text>
