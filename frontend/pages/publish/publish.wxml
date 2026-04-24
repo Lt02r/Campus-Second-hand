@@ -31,7 +31,7 @@
   <view class="form-group">
     <text class="form-label">物品图片（最多3张）<text class="required">*</text></text>
     <view class="image-list">
-      <view class="image-item" wx:for="{{images}}" wx:key="index">
+      <view class="image-item"wx:if="{{images && images.length}}" wx:for="{{images}}" wx:key="index">
         <image class="preview-img" src="{{item}}" mode="aspectFill" />
         <view class="img-delete" bindtap="removeImage" data-index="{{index}}">×</view>
       </view>

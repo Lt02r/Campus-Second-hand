@@ -1,8 +1,8 @@
 App({
   globalData: {
-    userId: null,
+    userId: [],
     isBound: false,
-    userInfo: null,
+    userInfo: [],
     baseUrl: 'https://backend.lt02r.cn'  //后端
   },
   

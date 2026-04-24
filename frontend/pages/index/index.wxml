@@ -26,7 +26,7 @@
   <!-- Item list -->
   <view class="item-list" wx:if="{{items && items.length > 0}}">
     <!-- 确保 item 和 item.images 都存在再渲染 -->
-    <view class="item-card" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}" wx:if="{{item}}">
+    <view class="item-card" wx:if="{{items && items.length}}" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}" wx:if="{{item}}">
       <image class="item-img" src="{{(item.images && item.images[0]) || '/images/placeholder.png'}}" mode="aspectFill" />
       <view class="item-info">
         <view class="item-title">{{item.title}}</view>

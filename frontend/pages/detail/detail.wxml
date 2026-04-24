@@ -1,7 +1,7 @@
 <view class="container" wx:if="{{item}}">
   <!-- Image swiper -->
   <swiper class="swiper" indicator-dots="{{item.images.length > 1}}" autoplay="{{false}}" circular>
-    <swiper-item wx:for="{{item.images}}" wx:key="index">
+    <swiper-item wx:if="{{item.images && item.images.length}}" wx:for="{{item.images}}"  wx:key="index">
       <image class="swiper-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-url="{{item}}" />
     </swiper-item>
     <swiper-item wx:if="{{item.images.length === 0}}">
@@ -46,7 +46,7 @@
   <view class="messages-section">
     <text class="section-title">留言咨询（{{messages.length}}）</text>
     <view class="message-list">
-      <view class="message-item" wx:for="{{messages}}" wx:key="id" wx:for-item="msg">
+      <view class="message-item" wx:if="{{messages && messages.length}}" wx:for="{{messages}}"  wx:key="id" wx:for-item="msg">
         <image class="msg-avatar" src="{{msg.avatar_url || '/images/default-avatar.png'}}" mode="aspectFill" />
         <view class="msg-content">
           <view class="msg-header">
