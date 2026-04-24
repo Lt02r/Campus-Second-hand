@@ -41,13 +41,17 @@ Page({
         const item = res.data;
         const categoryIndex = this.data.categories.findIndex(c => c.value === item.category);
         const locationIndex = this.data.locations.indexOf(item.location);
+        
+        // 增加防御:
+        const safeImages = Array.isArray(item.images) ? item.images : [];
+        
         this.setData({
           title: item.title,
           categoryIndex: categoryIndex >= 0 ? categoryIndex : 0,
           price: String(item.price),
           description: item.description,
           locationIndex: locationIndex >= 0 ? locationIndex : 0,
-          images: (item.images || []).map(fullImageUrl)
+          images: safeImages.map(fullImageUrl) // 修改这里！
         });
       }
     } catch (e) {}

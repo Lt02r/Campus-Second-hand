@@ -24,9 +24,10 @@
   </view>
 
   <!-- Item list -->
-  <view class="item-list">
-    <view class="item-card" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
-      <image class="item-img" src="{{item.images[0] || '/images/placeholder.png'}}" mode="aspectFill" />
+  <view class="item-list" wx:if="{{items && items.length > 0}}">
+    <!-- 确保 item 和 item.images 都存在再渲染 -->
+    <view class="item-card" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}" wx:if="{{item}}">
+      <image class="item-img" src="{{(item.images && item.images[0]) || '/images/placeholder.png'}}" mode="aspectFill" />
       <view class="item-info">
         <view class="item-title">{{item.title}}</view>
         <view class="item-meta">
@@ -40,7 +41,8 @@
       </view>
     </view>
     <view class="loading-tip" wx:if="{{loading}}">加载中...</view>
-    <view class="empty-tip" wx:if="{{!loading && items.length === 0}}">暂无商品</view>
     <view class="no-more" wx:if="{{!hasMore && items.length > 0}}">没有更多了</view>
   </view>
+  
+  <view class="empty-tip" wx:if="{{!loading && (!items || items.length === 0)}}">暂无商品</view>
 </view>

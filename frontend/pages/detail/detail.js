@@ -22,9 +22,11 @@ Page({
     try {
       const res = await request(`/api/items/${id}`);
       if (res.code === 0) {
-        const item = { ...res.data, images: res.data.images.map(fullImageUrl) };
+        // 【终极防御1】：确保 images 是数组，不再信任后端返回的数据类型
+        const rawImages = Array.isArray(res.data.images) ? res.data.images : [];
+        const item = { ...res.data, images: rawImages.map(fullImageUrl) };
         this.setData({ item });
-        wx.setNavigationBarTitle({ title: item.title });
+        wx.setNavigationBarTitle({ title: item.title || '商品详情' });
       }
     } catch (e) {}
   },
@@ -32,8 +34,8 @@ Page({
     try {
       const res = await request(`/api/messages/item/${id}`);
       if (res.code === 0) {
-        // 使用 || [] 确保即使后端返回 null 或 undefined，也会赋值为空数组
-        this.setData({ messages: res.data || [] });
+        // 【终极防御2】：确保 messages 绝对是数组
+        this.setData({ messages: Array.isArray(res.data) ? res.data : [] });
       }
     } catch (e) {}
   },
@@ -88,6 +90,7 @@ Page({
   },
   onPreviewImage(e) {
     const { url } = e.currentTarget.dataset;
+    if (!this.data.item || !this.data.item.images) return;
     wx.previewImage({ urls: this.data.item.images, current: url });
   }
 });
