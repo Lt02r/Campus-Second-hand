@@ -32,7 +32,8 @@ Page({
     try {
       const res = await request(`/api/messages/item/${id}`);
       if (res.code === 0) {
-        this.setData({ messages: res.data });
+        // 使用 || [] 确保即使后端返回 null 或 undefined，也会赋值为空数组
+        this.setData({ messages: res.data || [] });
       }
     } catch (e) {}
   },

@@ -52,24 +52,35 @@ Page({
       if (this.data.category) queryParts.push(`category=${this.data.category}`);
       if (this.data.minPrice) queryParts.push(`minPrice=${this.data.minPrice}`);
       if (this.data.maxPrice) queryParts.push(`maxPrice=${this.data.maxPrice}`);
+      
       const res = await request('/api/items?' + queryParts.join('&'));
-      if (res.code === 0) {
-        const newItems = res.data.map(item => ({
+      
+      if (res && res.code === 0) {
+        // 极致防御：确保 res.data 是数组，且里面每个 item 的 images 也是数组
+        const safeData = Array.isArray(res.data) ? res.data : [];
+        const newItems = safeData.map(item => ({
           ...item,
-          images: item.images.map(fullImageUrl)
+          images: Array.isArray(item.images) ? item.images.map(fullImageUrl) : []
         }));
+        
+        // 极致防御：确保原有的 items 也是数组再执行 concat
+        const currentItems = Array.isArray(this.data.items) ? this.data.items : [];
+        
         this.setData({
-          items: refresh ? newItems : this.data.items.concat(newItems),
+          items: refresh ? newItems : currentItems.concat(newItems),
           page: page + 1,
           hasMore: newItems.length === 10,
           loading: false
         });
+      } else {
+        this.setData({ loading: false });
       }
     } catch (e) {
       this.setData({ loading: false });
     }
     wx.stopPullDownRefresh();
   },
+  
   onSearch(e) {
     // bindconfirm passes detail.value; bindtap (search button) does not
     if (e.detail && e.detail.value !== undefined) {

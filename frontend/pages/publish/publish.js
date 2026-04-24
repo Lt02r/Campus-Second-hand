@@ -47,7 +47,7 @@ Page({
           price: String(item.price),
           description: item.description,
           locationIndex: locationIndex >= 0 ? locationIndex : 0,
-          images: item.images.map(fullImageUrl)
+          images: (item.images || []).map(fullImageUrl)
         });
       }
     } catch (e) {}

@@ -39,16 +39,24 @@ Page({
     try {
       const res = await request('/api/items/my');
       if (res.code === 0) {
-        this.setData({ myItems: res.data.map(item => ({ ...item, images: item.images.map(fullImageUrl) })) });
+        // 增加防御: (res.data || []) 和 (item.images || [])
+        const items = (res.data || []).map(item => ({
+          ...item,
+          images: (item.images || []).map(fullImageUrl)
+        }));
+        this.setData({ myItems: items });
       }
     } catch (e) {}
   },
+  
   async loadMyMessages() {
     try {
       const res = await request('/api/messages/my');
-      if (res.code === 0) this.setData({ myMessages: res.data });
+      // 增加防御: res.data || []
+      if (res.code === 0) this.setData({ myMessages: res.data || [] });
     } catch (e) {}
   },
+  
   onTabChange(e) {
     this.setData({ activeTab: e.currentTarget.dataset.tab });
   },

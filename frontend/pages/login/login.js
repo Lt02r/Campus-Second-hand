@@ -26,7 +26,7 @@ Page({
     try {
       const res = await request('/api/auth/colleges');
       if (res && res.code === 0) {
-        this.setData({ colleges: res.data });
+        this.setData({ colleges: res.data  || [] });
         console.log('学院列表加载成功:', res.data);
       } else {
         console.error('后台返回了错误:', res);
