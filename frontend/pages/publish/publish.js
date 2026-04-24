@@ -64,13 +64,14 @@ Page({
   onChooseImage() {
     const { images } = this.data;
     if (images.length >= 3) return wx.showToast({ title: '最多上传3张图片', icon: 'none' });
-    wx.chooseImage({
+    wx.chooseMedia({
       count: 3 - images.length,
+      mediaType: ['image'],
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: async (res) => {
-        for (const path of res.tempFilePaths) {
-          await this.uploadImage(path);
+        for (const file of (res.tempFiles || [])) {
+          await this.uploadImage(file.tempFilePath);
         }
       }
     });
