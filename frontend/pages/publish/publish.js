@@ -69,7 +69,8 @@ Page({
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: async (res) => {
-        for (const path of res.tempFilePaths) {
+        const tempPaths = Array.isArray(res.tempFilePaths) ? res.tempFilePaths : [];
+        for (const path of tempPaths) {
           await this.uploadImage(path);
         }
       }
